@@ -17,6 +17,10 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         select: false
+    },
+    institution: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true

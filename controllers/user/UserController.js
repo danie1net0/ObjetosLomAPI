@@ -28,7 +28,13 @@ module.exports = {
 
   async store(req, res) {
     try {
+      const { email } = req.body;
+      if (await User.findOne({ email }))
+        return res.status(400).json({ meta: { success: false, message: 'Esse endereço de e-mail já se encontra em uso.' } });
+
       const user = await User.create(req.body);
+      user.password = undefined;
+
       return res.status(201).json({ data: user, meta: { success: true, message: 'Usuário cadastrado com sucesso!' } });
     } catch(error) {
       return res.status(500).json({ meta: { success: false, message: 'Ocorreu um erro inesperado, tente novamente mais tarde.' } });
