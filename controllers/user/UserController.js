@@ -1,4 +1,5 @@
 const User = require('../../models/user/User');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   async index(req, res) {
@@ -21,7 +22,7 @@ module.exports = {
       else
         return res.status(404).json({ data: {}, meta: { success: false, message: 'Usuário não encontrado' } });
     } catch(error) {
-      return res.status(500).json({ meta: { success: error, message: 'Ocorreu um erro inesperado, tente novamente mais tarde.' } });
+      return res.status(500).json({ meta: { success: false, message: 'Ocorreu um erro inesperado, tente novamente mais tarde.' } });
     }
   },
 
@@ -36,6 +37,9 @@ module.exports = {
 
   async update(req, res) {
     try {
+      const data = req.body;
+      data.password = await bcrypt.hash(data.password, 10);
+      
       const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
       if (user != null)

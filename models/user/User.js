@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const paginate = require('mongoose-paginate');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new Schema({
     name: {
@@ -19,6 +20,11 @@ const UserSchema = new Schema({
     }
 }, {
     timestamps: true
+});
+
+UserSchema.pre('save', async function (next) {
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
 });
 
 UserSchema.plugin(paginate);
