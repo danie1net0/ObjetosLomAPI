@@ -14,7 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/objects', require('./routes/object'));
+app.use('/api/objects', require('./routes/object/object'));
+app.use('/api/acceppt-objects', require('./routes/object/acceppt-object'));
 
 app.use('/api/users', require('./routes/user/user'));
 app.use('/api/acceppt-users', require('./routes/user/acceppt-user'));
