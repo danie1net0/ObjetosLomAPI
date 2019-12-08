@@ -20,6 +20,6 @@ module.exports = {
 
     const token = jwt.sign({ id: user._id }, process.env.SECRET_TOKEN, { expiresIn: 86400 });
 
-    return res.json({ data: { user: user, token: token }, meta: { success: true, message: 'Usuário autenticado com sucesso' } });
+    return res.json({ data: { token: token }, meta: { success: true, message: 'Usuário autenticado com sucesso' } });
   }
 };

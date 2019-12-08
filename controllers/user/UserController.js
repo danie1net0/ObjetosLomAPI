@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs');
 module.exports = {
   async index(req, res) {
     try {
-      const { page = 1 } = req.query;
-      const users = await User.paginate({}, { page: page, limit: 10 });
+      const { page = 1, active = true } = req.query;
+      const users = await User.paginate({ active }, { page: page, limit: 10 });
 
       return res.json({ data: users, meta: { success: true, message: 'Usuários recuperados com sucesso!' } });
     } catch(error) {

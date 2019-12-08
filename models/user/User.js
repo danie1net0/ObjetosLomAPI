@@ -6,7 +6,11 @@ const UserSchema = new Schema({
     name: {
         type: String,
         required: true
-    }, 
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         unique: true,
@@ -21,6 +25,10 @@ const UserSchema = new Schema({
     institution: {
         type: String,
         required: true
+    },
+    active: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true
