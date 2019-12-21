@@ -3,27 +3,31 @@ require('dotenv/config');
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  try {
+    const authHeader = req.headers.authorization;
 
-  if (!authHeader) 
-    return res.status(401).json({ meta: { success: false, message: 'Não autenticado.' } });
+    if (!authHeader)
+      return res.status(401).json({ meta: { success: false, message: 'Não autenticado.' } });
 
-  const parts = authHeader.split(' ');
+    const parts = authHeader.split(' ');
 
-  if (parts == 2)
-    return res.status(401).json({ meta: { success: false, message: 'Token inválido!' } });
-
-  const [ scheme, token ] = parts;
-  
-  if (!/^Bearer$/.test(scheme))
-    return res.status(401).json({ meta: { success: false, message: 'Token inválido!' } });
-
-  jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
-    if (err) 
+    if (parts == 2)
       return res.status(401).json({ meta: { success: false, message: 'Token inválido!' } });
 
-    req.userId = decoded.id;
-    
-    return next();
-  });
+    const [ scheme, token ] = parts;
+
+    if (!/^Bearer$/.test(scheme))
+      return res.status(401).json({ meta: { success: false, message: 'Token inválido!' } });
+
+    jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
+      if (err)
+        return res.status(401).json({ meta: { success: false, message: 'Token inválido!' } });
+
+      req.userId = decoded.id;
+
+      return next();
+    });
+  } catch(error) {
+    return res.status(500).json({ meta: { success: false, message: 'Ocorreu um erro inesperado, tente novamente mais tarde.' } });
+  }
 };
