@@ -21,7 +21,7 @@ module.exports = {
 
       user.password = undefined;
 
-      const token = jwt.sign({ id: user._id }, process.env.SECRET_TOKEN, { expiresIn: 86400 });
+      const token = jwt.sign({ user }, process.env.SECRET_TOKEN, { expiresIn: 86400 });
 
       return res.json({ data: { token: token }, meta: { success: true, message: 'Usuário autenticado com sucesso!' } });
     } catch(error) {
