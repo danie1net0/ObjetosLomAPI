@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 const paginate = require('mongoose-paginate');
 const bcrypt = require('bcryptjs');
 

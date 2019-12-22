@@ -73,6 +73,24 @@ module.exports = {
     }
   },
 
+  async verifyToken(req, res) {
+    try {
+      const token = req.params.token;
+
+      const user = await User.findOne({ passwordResetToken: token, active: true }).select('passwordResetToken passwordResetExpires email');
+      if (user == null)
+        return res.status(404).json({ meta: { success: false, message: 'Token de recuperação de senha inválido!' } });
+
+      const now = new Date();
+      if (now > user.passwordResetExpires)
+        return res.status(400).json({ meta: { success: false, message: 'Token expirado.' } });
+
+      return res.json({ data: { email: user.email, token: user.passwordResetToken }, meta: { success: true, message: 'Token validado com sucesso!' } });
+    } catch (error) {
+      return res.status(500).json({ meta: { success: false, message: 'Ocorreu um erro inesperado, tente novamente mais tarde.' } });
+    }
+  },
+
   async resetPassword(req, res) {
     const { email, token, password, password_confirmation } = req.body;
 
