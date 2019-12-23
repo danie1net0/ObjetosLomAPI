@@ -11,7 +11,7 @@ module.exports = {
     try {
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email }).select('+password');
+      const user = await User.findOne({ email, active: true }).select('+password');
 
       if (user == null)
         return res.status(404).json({ meta: { success: false, message: 'Usuário não encontrado.' } });
