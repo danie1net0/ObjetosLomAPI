@@ -1,13 +1,16 @@
 const User = require('../../models/user/User');
-const bcrypt = require('bcryptjs');
 
 module.exports = {
   async index(req, res) {
     try {
-      const { page = 1, key = 'active', value = 'true' } = req.query;
+      const query = req.query;
 
-      const query = `{ "${ key }": "${ value }" }`;
-      const users = await User.paginate(JSON.parse(query), { page: page, limit: 10 });
+      if (query.name !== undefined)
+        query.name = { $regex: new RegExp(query.name), $options: 'i'};
+      else if (query.institution !== undefined)
+        query.institution = { $regex: new RegExp(query.institution), $options: 'i'};
+
+      const users = await User.find(query);
 
       return res.json({ data: users, meta: { success: true, message: 'Usuários recuperados com sucesso!' } });
     } catch(error) {
@@ -45,9 +48,6 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const data = req.body;
-      data.password = await bcrypt.hash(data.password, 10);
-      
       const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
       if (user != null)

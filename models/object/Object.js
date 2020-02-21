@@ -180,16 +180,16 @@ const ObjectSchema = new Schema({
             language: String,
             content: String
           }
-        }],
-        description: {
-          language: String,
-          content: String
-        },
-        keyword: [{
-          _id: false,
-          language: String,
-          content: String
         }]
+      }],
+      description: {
+        language: String,
+        content: String
+      },
+      keyword: [{
+        _id: false,
+        language: String,
+        content: String
       }]
     }]
   },

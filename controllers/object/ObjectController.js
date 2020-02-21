@@ -3,8 +3,10 @@ const Object = require('../../models/object/Object');
 module.exports = {
   async index(req, res) {
     try {
-      const { page = 1, acceppt = true } = req.query;
-      const objects = await Object.paginate({ acceppt }, { page: page, limit: 10 });
+      const { key = 'acceppt', value = 'true' } = req.query;
+
+      const query = JSON.parse(`{ "${ key }": "${ value }" }`);
+      const objects = await Object.paginate(query);
 
       return res.json({ data: objects, meta: { success: true, message: 'Objetos recuperados com sucesso!' } });
     } catch(error) {
